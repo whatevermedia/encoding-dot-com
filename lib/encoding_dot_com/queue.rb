@@ -101,7 +101,17 @@ module EncodingDotCom
     def add_request(action, source, formats, opts={})
       response = make_request(action) do |q|
         q.source source
-        formats.each {|url, format| format.build_xml(q, url) }
+        
+        formats.each do |url, format|
+          if format.respond_to? :each
+            format.each do |f|
+              f.build_xml(q, url)
+            end
+          else
+            format.build_xml(q, url)
+          end
+        end
+        
         opts.each do |tag, value|
           q.send tag, value 
         end
