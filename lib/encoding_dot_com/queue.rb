@@ -24,6 +24,8 @@ module EncodingDotCom
     #
     # +source+:: the source url
     # +formats+:: a hash of destination urls => format objects
+    # +opts+:: a hash of additional options, basically extra keys
+    #   for the request like notify_url. 
     def add_and_process(source, formats={}, opts={})
       add_request("AddMedia", source, formats, opts)
     end
@@ -33,6 +35,8 @@ module EncodingDotCom
     #
     # +source+:: the source url
     # +formats+:: a hash of destination urls => format objects
+    # +opts+:: a hash of additional options, basically extra keys
+    #   for the request like notify_url.
     def add(source, formats={}, opts={})
       add_request("AddMediaBenchmark", source, formats, opts)
     end
