@@ -29,7 +29,7 @@ describe "Encoding.com video format" do
       lambda { EncodingDotCom::VideoFormat.new("output" => "foo") }.should raise_error(EncodingDotCom::IllegalFormatAttribute)
     end
 
-    %w{flv fl9 wmv 3gp mp4 m4v ipod iphone appletv psp zune mp3 wma}.each do |format|
+    %w{flv fl9 wmv 3gp mp4 m4v ipad ipod iphone appletv psp zune mp3 wma}.each do |format|
       it "should allow #{format} as an output format" do
         lambda { EncodingDotCom::VideoFormat.new("output" => format) }.should_not raise_error
       end
