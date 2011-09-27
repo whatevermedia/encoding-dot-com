@@ -25,6 +25,7 @@ adapter and it is easy to write your own.
 
 == Dependencies
 
+* Ruby 1.9.2+ - For older Rubies use the ruby-187[https://github.com/simianarmy/encoding-dot-com/tree/ruby-187] branch
 * Nokogiri
 * (Optionally) curb
 
