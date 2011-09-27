@@ -83,10 +83,11 @@ module EncodingDotCom
     # +media_id+:: id of the item in the encoding.com queue
     # +formats+:: a hash of destination urls => Format objects
     def update(media_id, formats={})
-      make_request("UpdateMedia") do |q|
+      response = make_request("UpdateMedia") do |q|
         q.mediaid media_id
         formats.each {|url, format| format.build_xml(q, url) }        
       end
+      (msg = response.xpath("/response/message").text) && msg == "Updated"
     end
 
     # Returns a MediaInfo object with some attributes of the video
