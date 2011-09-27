@@ -25,6 +25,7 @@ adapter and it is easy to write your own.
 
 == Dependencies
 
+* Ruby < 1.9 - For Ruby 1.9+, use master branch.
 * Nokogiri
 * (Optionally) curb
 
