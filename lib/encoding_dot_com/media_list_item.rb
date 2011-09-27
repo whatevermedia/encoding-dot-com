@@ -1,5 +1,3 @@
-require 'parsedate'
-
 module EncodingDotCom
 
   # Represents a video or image in the encoding.com queue
@@ -21,8 +19,13 @@ module EncodingDotCom
     private
 
     def parse_time_node(node)
-      time_elements = ParseDate.parsedate(node.text)
-      Time.local *time_elements unless time_elements.all? {|e| e.nil? || e == 0 }
+      # Isn't there an easier way to return a Time object = date string??
+      begin
+        dt = DateTime.parse(node.text)
+        Time.local dt.year, dt.mon, dt.mday, dt.hour, dt.min, dt.sec
+      rescue
+        nil
+      end
     end
   end
 end

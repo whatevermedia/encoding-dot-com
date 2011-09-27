@@ -1,5 +1,3 @@
-require 'parsedate'
-
 module EncodingDotCom
 
   # Represents the full status response of a video or image in the encoding.com queue
@@ -31,8 +29,12 @@ module EncodingDotCom
 
     def parse_time_node(node)
       node = node.is_a?(Array) ? node.first : node
-      time_elements = ParseDate.parsedate(node.text)
-      Time.local *time_elements unless time_elements.all? {|e| e.nil? || e == 0 }
+      begin
+        dt = DateTime.parse(node.text)
+        Time.local dt.year, dt.mon, dt.mday, dt.hour, dt.min, dt.sec
+      rescue
+        nil
+      end
     end
   end
 end
