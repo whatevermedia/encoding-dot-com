@@ -8,5 +8,5 @@ gem 'roodi'
 gem 'curb'
 
 group :test do
-	gem "ruby-debug19"
+gem "ruby-debug19"
 end

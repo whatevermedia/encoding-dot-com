@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.version = "0.0.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Roland Swingler", "Alan Kennedy", "Levent Ali"]
-  s.date = %q{2010-07-21}
+  s.authors = [%q{Roland Swingler}, %q{Alan Kennedy}, %q{Levent Ali}]
+  s.date = %q{2011-11-04}
   s.description = %q{A ruby wrapper for the encoding.com API}
   s.email = %q{roland.swingler@gmail.com}
   s.extra_rdoc_files = [
@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
     ".document",
      ".gitignore",
      "Gemfile",
+     "Gemfile.lock",
      "LICENSE",
      "README.rdoc",
      "Rakefile",
@@ -51,9 +52,9 @@ Gem::Specification.new do |s|
      "spec/thumbnail_format_spec.rb"
   ]
   s.homepage = %q{http://encodingdotcom.rubyforge.org/}
-  s.rdoc_options = ["--charset=UTF-8"]
-  s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.7}
+  s.rdoc_options = [%q{--charset=UTF-8}]
+  s.require_paths = [%q{lib}]
+  s.rubygems_version = %q{1.8.6}
   s.summary = %q{A ruby wrapper for the encoding.com API}
   s.test_files = [
     "spec/encoding_dot_com/http_adapters/curb_adapter_spec.rb",
@@ -68,7 +69,6 @@ Gem::Specification.new do |s|
   ]
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
