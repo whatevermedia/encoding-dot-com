@@ -1,5 +1,7 @@
 = encoding-dot-com
 
+{<img src="https://travis-ci.org/24tru/encoding-dot-com.png" />}[https://travis-ci.org/24tru/encoding-dot-com]
+
 A client library for the encoding.com[http://www.encoding.com] API.
 
 Supports all the actions of the encoding.com API. Example usage:
