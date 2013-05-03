@@ -16,7 +16,7 @@ describe "Encoding.com Queue facade" do
     response = stub("Http Response", :code => "200", :body => response_xml)
     @http.should_receive(:post).and_return(response)
   end
-  
+
   describe "any xml sent to encoding.com" do
     [:add_and_process, :status].each do |method|
       it "should have a root query node for method #{method}" do
@@ -26,12 +26,12 @@ describe "Encoding.com Queue facade" do
 
       it "should have a user_id node for method #{method}" do
         expect_xml_with_xpath("/query/userid[text()=1234]")
-        @facade.send(method, stub("source"))        
+        @facade.send(method, stub("source"))
       end
 
       it "should have a user key node for method #{method}" do
         expect_xml_with_xpath("/query/userkey[text()='abcd']")
-        @facade.send(method, stub("source"))                
+        @facade.send(method, stub("source"))
       end
     end
   end
@@ -55,7 +55,7 @@ describe "Encoding.com Queue facade" do
       lambda { @facade.add_and_process(stub("source"), {}) }.should raise_error(EncodingDotCom::MessageError)
     end
   end
-  
+
   describe "xml sent to encoding.com to process a video" do
     it "should have an action of 'AddMedia'." do
       expect_xml_with_xpath("/query/action[text()='AddMedia']")
@@ -108,7 +108,7 @@ describe "Encoding.com Queue facade" do
 
   describe "calling status_report to retreive additional status details" do
     it "should parse progress properly" do
-      expect_response_xml("<response><status>New</status><progress>99.3</progress></response>")      
+      expect_response_xml("<response><status>New</status><progress>99.3</progress></response>")
       @facade.status_report("mediaid").progress.should == 99
     end
 
@@ -133,6 +133,7 @@ describe "Encoding.com Queue facade" do
     it "should parse everything properly" do
       expect_response_xml("<response><id>101</id><userid>100</userid><sourcefile>sourceURL</sourcefile><status>Finished</status><notifyurl>notifyURL</notifyurl><created>2010-02-26 15:29:55</created><started>2010-02-26 15:30:31</started><finished>2010-02-26 15:30:48</finished><downloaded>2010-02-26 15:30:07</downloaded><filesize>4399104</filesize><processor>RACKSPACE</processor><time_left>0</time_left><progress>100.0</progress><format><created>otherTime</created></format></response>")
       r = @facade.status_report("mediaid")
+      puts
       r.progress.should == 100
       r.time_left.should == 0
       r.status.should == 'Finished'
@@ -149,7 +150,7 @@ describe "Encoding.com Queue facade" do
       expect_xml_with_xpath("/query/action[text()='GetMediaList']")
       @facade.list
     end
-    
+
     describe "returned MediaListItems" do
       before :each do
         expect_response_xml(<<-END
@@ -166,7 +167,7 @@ describe "Encoding.com Queue facade" do
         END
         )
       end
-      
+
       it "should return an array of media list values" do
         @facade.list.should be_kind_of(Enumerable)
       end
@@ -174,15 +175,15 @@ describe "Encoding.com Queue facade" do
       it "should have a hash of returned attributes with a mediafile key" do
         @facade.list.first.media_file.should == "foo.wmv"
       end
-      
+
       it "should have a hash of returned attributes with a mediaid key" do
         @facade.list.first.media_id.should == 1234
       end
-      
+
       it "should have a hash of returned attributes with a mediastatus key" do
         @facade.list.first.media_status.should == "Closed"
       end
-      
+
       it "should have a hash of returned attributes with a createdate key" do
         @facade.list.first.create_date.should == Time.local(2009, 1, 1, 12, 0, 1)
       end
@@ -267,7 +268,7 @@ describe "Encoding.com Queue facade" do
       format = EncodingDotCom::Format.create("output" => "flv")
       @facade.add(stub("source"), {"http://example.com" => format})
     end
-    
+
     it "should allow setting arbitrary nodes (like notify)" do
       expect_xml_with_xpath("/query/notify[text()='testURL']")
       @facade.add("http://example.com/", {}, {'notify' => 'testURL'})
