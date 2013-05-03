@@ -1,3 +1,4 @@
+require 'date'
 module EncodingDotCom
 
   # Represents the full status response of a video or image in the encoding.com queue
