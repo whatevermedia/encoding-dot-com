@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'psych'
 require 'rake'
+require 'rspec'
+require 'rspec/core/rake_task'
 
 begin
   require 'jeweler'
@@ -17,6 +19,12 @@ begin
   end
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
+end
+
+desc "Run all examples"
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.ruby_opts = %w[-w]
+  t.rspec_opts = %w[--color]
 end
 
 # require 'spec/rake/spectask'
@@ -58,19 +66,19 @@ rescue LoadError
   end
 end
 
-# require 'rake/task'
-# Rake::RDocTask.new do |rdoc|
-#   if File.exist?('VERSION')
-#     version = File.read('VERSION')
-#   else
-#     version = ""
-#   end
+require 'rdoc/task'
+RDoc::Task.new do |rdoc|
+  if File.exist?('VERSION')
+    version = File.read('VERSION')
+  else
+    version = ""
+  end
 
-#   rdoc.rdoc_dir = 'rdoc'
-#   rdoc.title = "Encoding dot com #{version}"
-#   rdoc.rdoc_files.include('README*')
-#   rdoc.rdoc_files.include('lib/**/*.rb')
-# end
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title = "Encoding dot com #{version}"
+  rdoc.rdoc_files.include('README*')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+end
 
 task :default => [:spec, :roodi]
 
