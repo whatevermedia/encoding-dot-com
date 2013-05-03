@@ -12,10 +12,10 @@ Supports all the actions of the encoding.com API. Example usage:
     queue = EncodingDotCom::Queue.new(1234, "secret")
     
     # Create one or more output formats
-    format = EncodingDotCom::Format.create("output" => "flv")
+    format = EncodingDotCom::Format.create("output" => "flv", "destination" => "http://destination/url/here")
     
-    # Get an media item processed. You can pass multiple output formats in a hash.
-    media_id = queue.add_and_process("http://source/url/here", "http://destination/url/here" => format)
+    # Get an media item processed. You can pass multiple output formats in an array.
+    media_id = queue.add_and_process("http://source/url/here", format)
     
     queue.status(media_id) # => returns a string like "Waiting for encoder" or "Finished"
     queue.info(media_id)   # => returns information about an item in the queue
