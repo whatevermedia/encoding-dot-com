@@ -34,7 +34,8 @@ module EncodingDotCom
       begin
         dt = DateTime.parse(node.text)
         Time.local dt.year, dt.mon, dt.mday, dt.hour, dt.min, dt.sec
-      rescue
+      rescue Exception => e
+        puts e
         nil
       end
     end
