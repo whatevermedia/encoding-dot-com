@@ -20,8 +20,6 @@ module EncodingDotCom
       @notify_url = (node / "notifyurl").text
 
       # Different xpath to handle multiple created nodes in document (e.g. in format sections)
-      puts node.xpath('response/created')
-      puts parse_time_node(node.xpath('response/created'))
       @created = parse_time_node(node.xpath('response/created'))
       @started = parse_time_node(node.xpath('response/started'))
       @finished = parse_time_node(node.xpath('response/finished'))
@@ -36,7 +34,6 @@ module EncodingDotCom
         dt = DateTime.parse(node.text)
         Time.local dt.year, dt.mon, dt.mday, dt.hour, dt.min, dt.sec
       rescue Exception => e
-        puts e
         nil
       end
     end
