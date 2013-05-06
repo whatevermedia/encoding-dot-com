@@ -58,14 +58,15 @@ describe "Encoding.com Image Format" do
     it "should be between 1 and 100" do
       lambda { format_xml("quality" => 0) }.should raise_error(EncodingDotCom::IllegalFormatAttribute)
       lambda { format_xml("quality" => 101) }.should raise_error(EncodingDotCom::IllegalFormatAttribute)
-      lambda { format_xml("quality" => 1) }.should_not raise_error(EncodingDotCom::IllegalFormatAttribute)      
-      lambda { format_xml("quality" => 100) }.should_not raise_error(EncodingDotCom::IllegalFormatAttribute)      
+      lambda { format_xml("quality" => 1) }.should_not raise_error(EncodingDotCom::IllegalFormatAttribute)
+      lambda { format_xml("quality" => 100) }.should_not raise_error(EncodingDotCom::IllegalFormatAttribute)
     end
   end
-  
+
   def format_xml(attributes={})
+    attributes[:destination] = "http://example.com"
     format = EncodingDotCom::ImageFormat.new(attributes)
-    Nokogiri::XML::Builder.new {|b| format.build_xml(b, "http://example.com") }.to_xml
+    Nokogiri::XML::Builder.new {|b| format.build_xml(b) }.to_xml
   end
 end
 

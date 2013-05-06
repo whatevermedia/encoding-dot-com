@@ -1,7 +1,7 @@
 module EncodingDotCom
   # A Thumbnail output format
   class ThumbnailFormat < Format #:nodoc:
-    allowed_attributes :output, :time, :width, :height
+    allowed_attributes :output, :time, :width, :height, :destination
 
     # Creates a new ThumbnailFormat. You should be calling
     # Format.create(attributes) rather than this constructor directly.
@@ -17,7 +17,7 @@ module EncodingDotCom
     end
 
     private
-    
+
     def validate_time
       unless time.nil? || time.to_f > 0.01 || time.to_s =~ /\d\d:[0-5]\d:[0-5]\d(\.\d+)?/
         raise IllegalFormatAttribute.new("Time must be a number greater than 0.01 or HH:MM:SS.ms, was #{time}")
@@ -37,4 +37,4 @@ module EncodingDotCom
     end
   end
 end
-  
+

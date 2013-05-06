@@ -14,6 +14,8 @@ module EncodingDotCom
           FLVVP6Format.new(attributes)
         elsif attributes["output"] == "image"
           ImageFormat.new(attributes)
+        elsif attributes["output"] == "muxer"
+          MuxingFormat.new(attributes)
         else
           VideoFormat.new(attributes)
         end
@@ -42,32 +44,42 @@ module EncodingDotCom
     # Builds the XML for this format.
     #
     # +builder+:: a Nokogiri builder, declared with a block
-    # +destination_url+:: where the encoded file should be placed. See
-    #                     the encoding.com documentation for details.
     def build_xml(builder)
-      logo_attributes, other_attributes = self.class.allowed_attributes.partition {|a| a[0..3] == "logo" }
-
-      builder.format {
-        other_attributes.each do |attr|
-          builder.send(attr, output_value(attr)) unless @attributes[attr].nil?
-        end
-        if logo_attributes.any? {|attr| @attributes[attr] }
-          builder.logo {
-            logo_attributes.each {|attr| builder.send(attr, output_value(attr)) if @attributes[attr] }
-          }
-        end
-      }
+      build_node(builder, :format, @attributes)
     end
 
     private
 
+    # Builds the XML for this node.
+    #
+    # +builder+:: a Nokogiri builder, declared with a block
+    # +node+:: the current node you want to attach the data to
+    # +attributes+:: attributes to be set for the node
+    def build_node(builder, node, attributes)
+      builder.method_missing(node) {
+        attributes.each do |key, value|
+          #make sure the key is allowed
+          if self.class.allowed_attributes.include? key.to_s
+            #if the value is a hash, recursivley call this function until the xml is properly built
+            value = output_value(key, value)
+            if value.kind_of?(Hash)
+              build_node builder, key, value
+            else
+              # puts "adding" + value
+              builder.send(key, value) unless value.nil?
+            end
+          end
+        end
+      }
+    end
+
     # Returns a value suitable for the format XML - i.e. translates
     # booleans to yes/no.
-    def output_value(key)
+    def output_value(key, value)
       if self.class.boolean_attributes.include?(key)
-        (@attributes[key] ? "yes" : "no")
+        (value ? "yes" : "no")
       else
-        @attributes[key]
+        value
       end
     end
   end

@@ -33,7 +33,7 @@ module EncodingDotCom
     #
     # +source+:: the source url
     # +formats+:: a hash of destination urls => format objects
-    def add(source, formats={}, opts={})
+    def add(source, formats=[], opts={})
       add_request("AddMediaBenchmark", source, formats, opts)
     end
 
@@ -85,6 +85,7 @@ module EncodingDotCom
     def update(media_id, formats=[])
       response = make_request("UpdateMedia") do |q|
         q.mediaid media_id
+        formats = [formats] if !formats.kind_of?(Array)
         formats.each {|format| format.build_xml(q) }
       end
       (msg = response.xpath("/response/message").text) && msg == "Updated"
@@ -108,8 +109,8 @@ module EncodingDotCom
           q.send tag, value
         end
       end
-      media_id = response.xpath("/response/MediaID").text
-      media_id.to_i if media_id
+        media_id = response.xpath("/response/MediaID").text
+        media_id.to_i if media_id
     end
 
     def make_request(action_name, &block)

@@ -1,11 +1,11 @@
 module EncodingDotCom
   class ImageFormat < Format
-    allowed_attributes :output, :image_format, :size, :resize_method, :quality
+    allowed_attributes :output, :image_format, :size, :resize_method, :quality, :destination, :keep_aspect_ratio, :sharpen_radius, :sharpen_sigma, :remove_metadata
     boolean_attributes :keep_aspect_ratio
 
     def initialize(attributes={})
       @attributes = attributes.merge("output" => "image")
-      validate_attributes      
+      validate_attributes
     end
 
     private
@@ -21,7 +21,7 @@ module EncodingDotCom
         raise IllegalFormatAttribute.new("image_format should be one of jpg, png or gif.")
       end
     end
-    
+
     def validate_resize_method
       unless resize_method.nil? || %w{resize crop combine}.include?(resize_method)
         raise IllegalFormatAttribute.new("resize_method should be one of resize, crop or combine.")

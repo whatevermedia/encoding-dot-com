@@ -39,12 +39,12 @@ describe "Encoding.com Queue facade" do
   describe "request sent to encoding.com" do
     it "should return true if a success" do
       @http.should_receive(:post).and_return(stub("Http Response", :code => "200", :body => ""))
-      @facade.add_and_process(stub("source"), {}).should be_true
+      @facade.add_and_process(stub("source"), []).should be_true
     end
 
     it "should raise an AvailabilityError if response status from encoding.com is not a 200" do
       @http.should_receive(:post).and_return(stub("Http Response", :code => "503", :body => ""))
-      lambda { @facade.add_and_process(stub("source"), {}) }.should raise_error(EncodingDotCom::AvailabilityError)
+      lambda { @facade.add_and_process(stub("source"), []) }.should raise_error(EncodingDotCom::AvailabilityError)
     end
 
     it "should raise an MessageError if response contains errors" do
@@ -52,38 +52,38 @@ describe "Encoding.com Queue facade" do
                       :code => "200",
                       :body => "<?xml version=\"1.0\"?>\n<response><errors><error>Wrong query format</error></errors></response>\n")
       @http.should_receive(:post).and_return(response)
-      lambda { @facade.add_and_process(stub("source"), {}) }.should raise_error(EncodingDotCom::MessageError)
+      lambda { @facade.add_and_process(stub("source"), []) }.should raise_error(EncodingDotCom::MessageError)
     end
   end
 
   describe "xml sent to encoding.com to process a video" do
     it "should have an action of 'AddMedia'." do
       expect_xml_with_xpath("/query/action[text()='AddMedia']")
-      @facade.add_and_process(stub("source"), {})
+      @facade.add_and_process(stub("source"), [])
     end
 
     it "should include the source url" do
       expect_xml_with_xpath("/query/source[text()='http://example.com/']")
-      @facade.add_and_process("http://example.com/", {})
+      @facade.add_and_process("http://example.com/", [])
     end
 
     it "should include the formats provided" do
       expect_xml_with_xpath("/query/format/output[text()='flv']")
-      format = EncodingDotCom::Format.create("output" => "flv")
-      @facade.add_and_process(stub("source"), {stub("destination") => format})
+      format = EncodingDotCom::Format.create("output" => "flv", destination: stub("destination"))
+      @facade.add_and_process(stub("source"), format)
     end
 
     it "should include the destination urls in the formats provided" do
       expect_xml_with_xpath("/query/format/destination[text()='http://example.com']")
-      format = EncodingDotCom::Format.create("output" => "flv")
-      @facade.add_and_process(stub("source"), {"http://example.com" => format})
+      format = EncodingDotCom::Format.create("output" => "flv", destination: "http://example.com")
+      @facade.add_and_process(stub("source"), format)
     end
   end
 
   describe "calling add_and_process" do
     it "should return the a media id" do
       expect_response_xml("<response><MediaID>1234</MediaID></response>")
-      @facade.add_and_process(stub("source"), {}).should == 1234
+      @facade.add_and_process(stub("source"), []).should == 1234
     end
   end
 
@@ -224,53 +224,53 @@ describe "Encoding.com Queue facade" do
   describe "updating formats of an item already in the encoding.com queue" do
     it "should have an action of 'UpdateMedia'." do
       expect_xml_with_xpath("/query/action[text()='UpdateMedia']")
-      @facade.update(5678, {})
+      @facade.update(5678)
     end
 
     it "should have a mediaid of 1234." do
       expect_xml_with_xpath("/query/mediaid[text()='5678']")
-      @facade.update(5678, {})
+      @facade.update(5678)
     end
 
     it "should include the formats provided" do
       expect_xml_with_xpath("/query/format/output[text()='flv']")
-      format = EncodingDotCom::Format.create("output" => "flv")
-      @facade.update(5678, {stub("destination") => format})
+      format = EncodingDotCom::Format.create("output" => "flv", destination: stub("destination"))
+      @facade.update(5678, format)
     end
 
     it "should include the destination urls in the formats provided" do
       expect_xml_with_xpath("/query/format/destination[text()='http://example.com']")
-      format = EncodingDotCom::Format.create("output" => "flv")
-      @facade.update(5678, {"http://example.com" => format})
+      format = EncodingDotCom::Format.create("output" => "flv", destination: "http://example.com")
+      @facade.update(5678, format)
     end
   end
 
   describe "adding an item to the encoding.com queue but not processing it" do
     it "should have an action of 'AddMedia'." do
       expect_xml_with_xpath("/query/action[text()='AddMediaBenchmark']")
-      @facade.add(stub("source"), {})
+      @facade.add(stub("source"))
     end
 
     it "should include the source url" do
       expect_xml_with_xpath("/query/source[text()='http://example.com/']")
-      @facade.add("http://example.com/", {})
+      @facade.add("http://example.com/")
     end
 
     it "should include the formats provided" do
       expect_xml_with_xpath("/query/format/output[text()='flv']")
-      format = EncodingDotCom::Format.create("output" => "flv")
-      @facade.add(stub("source"), {stub("destination") => format})
+      format = EncodingDotCom::Format.create("output" => "flv", destination: stub("destination"))
+      @facade.add(stub("source"), format)
     end
 
     it "should include the destination urls in the formats provided" do
       expect_xml_with_xpath("/query/format/destination[text()='http://example.com']")
-      format = EncodingDotCom::Format.create("output" => "flv")
-      @facade.add(stub("source"), {"http://example.com" => format})
+      format = EncodingDotCom::Format.create("output" => "flv", destination: "http://example.com")
+      @facade.add(stub("source"), format)
     end
 
     it "should allow setting arbitrary nodes (like notify)" do
       expect_xml_with_xpath("/query/notify[text()='testURL']")
-      @facade.add("http://example.com/", {}, {'notify' => 'testURL'})
+      @facade.add("http://example.com/", [], {'notify' => 'testURL'})
     end
   end
 

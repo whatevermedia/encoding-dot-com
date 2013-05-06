@@ -11,10 +11,11 @@ describe "Encoding.com Thumbnail Format" do
   end
 
   def format_xml(attributes={})
+    attributes[:destination] = "http://example.com"
     format = EncodingDotCom::ThumbnailFormat.new(attributes)
-    Nokogiri::XML::Builder.new {|b| format.build_xml(b, "http://example.com") }.to_xml
+    Nokogiri::XML::Builder.new {|b| format.build_xml(b) }.to_xml
   end
-  
+
   it "should produce a format node in the xml output" do
     format_xml.should have_xpath("/format")
   end
@@ -53,12 +54,12 @@ describe "Encoding.com Thumbnail Format" do
   describe "valid dimensions" do
     it "should be a positive integer height" do
       lambda { EncodingDotCom::ThumbnailFormat.new("height" => -1) }.should raise_error(EncodingDotCom::IllegalFormatAttribute)
-      lambda { EncodingDotCom::ThumbnailFormat.new("height" => 1) }.should_not raise_error      
+      lambda { EncodingDotCom::ThumbnailFormat.new("height" => 1) }.should_not raise_error
     end
 
     it "should be a positive integer width" do
       lambda { EncodingDotCom::ThumbnailFormat.new("width" => -1) }.should raise_error(EncodingDotCom::IllegalFormatAttribute)
-      lambda { EncodingDotCom::ThumbnailFormat.new("width" => 1) }.should_not raise_error      
+      lambda { EncodingDotCom::ThumbnailFormat.new("width" => 1) }.should_not raise_error
     end
   end
 end

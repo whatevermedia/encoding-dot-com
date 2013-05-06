@@ -15,7 +15,7 @@ describe "Encoding.com video format" do
       EncodingDotCom::Format.create("output" => "image").should be_instance_of(EncodingDotCom::ImageFormat)
     end
   end
-  
+
   describe "#output" do
     it "should have a output attribute" do
       EncodingDotCom::VideoFormat.new("output" => "flv").output.should == "flv"
@@ -48,10 +48,10 @@ describe "Encoding.com video format" do
     describe "size restrictions" do
       it "should have a sizes of 320x120 or 320x180 if the output format is zune" do
         lambda { EncodingDotCom::VideoFormat.new("output" => "zune", "size" => "400x400") }.should raise_error(EncodingDotCom::IllegalFormatAttribute)
-        lambda { EncodingDotCom::VideoFormat.new("output" => "zune", "size" => "320x120") }.should_not raise_error        
+        lambda { EncodingDotCom::VideoFormat.new("output" => "zune", "size" => "320x120") }.should_not raise_error
         lambda { EncodingDotCom::VideoFormat.new("output" => "zune", "size" => "320x180") }.should_not raise_error
       end
-      
+
       it "should have sizes 320x240 or 640x480 if the output format is ipod" do
         lambda { EncodingDotCom::VideoFormat.new("output" => "ipod", "size" => "400x400") }.should raise_error(EncodingDotCom::IllegalFormatAttribute)
       end
@@ -79,7 +79,7 @@ describe "Encoding.com video format" do
       lambda { EncodingDotCom::VideoFormat.new("output" => "mp4", "video_codec" => "foo") }.should raise_error(EncodingDotCom::IllegalFormatAttribute)
     end
   end
-  
+
   describe "#build_xml" do
     it "should create a format node" do
       format = EncodingDotCom::VideoFormat.new("output" => "flv")
@@ -110,36 +110,37 @@ describe "Encoding.com video format" do
     end
 
     it "should create a logo node for logo attributes" do
-      format = EncodingDotCom::VideoFormat.new("output" => "flv", "logo_x" => 30)
+      format = EncodingDotCom::VideoFormat.new("output" => "flv", logo: {"logo_x" => 30})
       Nokogiri::XML::Builder.new do |b|
         format.build_xml(b)
-      end.to_xml.should have_xpath("/format/logo/logo_x[text()='30']")
+      end.to_xml
+      .should have_xpath("/format/logo/logo_x[text()='30']")
     end
 
     it "should have a destination node with the url passed to build xml" do
-      format = EncodingDotCom::VideoFormat.new("output" => "flv")
+      format = EncodingDotCom::VideoFormat.new("output" => "flv", destination: "http://example.com")
       Nokogiri::XML::Builder.new do |b|
-        format.build_xml(b, "http://example.com")
+        format.build_xml(b)
       end.to_xml.should have_xpath("/format/destination[text()='http://example.com']")
     end
 
     %w{two_pass cbr deinterlacing add_meta turbo}.each do |bool|
       it "should output boolean attribute #{bool} as yes when true" do
-        format = EncodingDotCom::VideoFormat.new("output" => "flv", bool => true)
+        format = EncodingDotCom::VideoFormat.new("output" => "flv", bool => true, destination: "http://example.com")
         Nokogiri::XML::Builder.new do |b|
-          format.build_xml(b, "http://example.com")
+          format.build_xml(b)
         end.to_xml.should have_xpath("/format/#{bool}[text()='yes']")
       end
 
       it "should output boolean attribute #{bool} as no when false" do
-        format = EncodingDotCom::VideoFormat.new("output" => "flv", bool => false)
+        format = EncodingDotCom::VideoFormat.new("output" => "flv", bool => false, destination: "http://example.com")
         Nokogiri::XML::Builder.new do |b|
-          format.build_xml(b, "http://example.com")
+          format.build_xml(b)
         end.to_xml.should have_xpath("/format/#{bool}[text()='no']")
       end
     end
   end
-  
+
   describe "setting allowed attributes on a format" do
     it "should have an attribute :foo" do
       class ExampleFormat1 < EncodingDotCom::Format
@@ -147,7 +148,7 @@ describe "Encoding.com video format" do
       end
       ExampleFormat1.allowed_attributes.should == ["foo"]
     end
-    
+
     it "should be able to set allowed attributes cumulatively" do
       class ExampleFormat2 < EncodingDotCom::Format
         allowed_attributes :foo
@@ -156,7 +157,7 @@ describe "Encoding.com video format" do
       ExampleFormat2.allowed_attributes.should == ["foo", "bar"]
     end
   end
-  
+
   describe "setting boolean attributes on a format" do
     it "should also create an allowed attribute" do
       class ExampleFormat3 < EncodingDotCom::Format
@@ -164,7 +165,7 @@ describe "Encoding.com video format" do
       end
       ExampleFormat3.allowed_attributes.should == ["foo"]
     end
-    
+
     it "should create a boolean attribute" do
       class ExampleFormat4 < EncodingDotCom::Format
         boolean_attributes :foo
