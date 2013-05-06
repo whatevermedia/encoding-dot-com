@@ -24,7 +24,7 @@ module EncodingDotCom
     #
     # +source+:: the source url
     # +formats+:: a hash of destination urls => format objects
-    def add_and_process(source, formats={}, opts={})
+    def add_and_process(source, formats=[], opts={})
       add_request("AddMedia", source, formats, opts)
     end
 
@@ -52,15 +52,15 @@ module EncodingDotCom
         q.mediaid media_id
       end
     end
-    
-    # Returns a MediaStatusReport object containing the status properties of 
-    # an entry in the encoding.com queue (much like full_status, but processed 
+
+    # Returns a MediaStatusReport object containing the status properties of
+    # an entry in the encoding.com queue (much like full_status, but processed
     # for easy accessibility) rather than a raw nokogiri document dump).
     def status_report(media_id)
       response = make_request("GetStatus") {|q| q.mediaid media_id }
       MediaStatusReport.new( response )
     end
-    
+
     # Returns a list of media in the encoding.com queue
     def list
       make_request("GetMediaList").xpath("/response/media").map {|node| MediaListItem.new(node) }
@@ -75,17 +75,17 @@ module EncodingDotCom
     def process(media_id)
       make_request("ProcessMedia") {|q| q.mediaid media_id }
     end
-    
+
     # Replaces all the formats in an item on the encoding.com queue
     # with the formats provided. This also kicks off the encoding
     # process - there is no need to call process after this.
     #
     # +media_id+:: id of the item in the encoding.com queue
     # +formats+:: a hash of destination urls => Format objects
-    def update(media_id, formats={})
+    def update(media_id, formats=[])
       response = make_request("UpdateMedia") do |q|
         q.mediaid media_id
-        formats.each {|url, format| format.build_xml(q, url) }        
+        formats.each {|format| format.build_xml(q) }
       end
       (msg = response.xpath("/response/message").text) && msg == "Updated"
     end
@@ -102,15 +102,16 @@ module EncodingDotCom
     def add_request(action, source, formats, opts={})
       response = make_request(action) do |q|
         q.source source
-        formats.each {|url, format| format.build_xml(q, url) }
+        formats = [formats] if !formats.kind_of?(Array)
+        formats.each {|format| format.build_xml(q) }
         opts.each do |tag, value|
-          q.send tag, value 
+          q.send tag, value
         end
       end
       media_id = response.xpath("/response/MediaID").text
       media_id.to_i if media_id
     end
-    
+
     def make_request(action_name, &block)
       query = build_query(action_name, &block)
       response = @http.post(ENDPOINT, :xml => query)
@@ -130,7 +131,7 @@ module EncodingDotCom
         }
       end.to_xml
     end
-    
+
     def check_for_response_errors(xml)
       errors = xml.xpath("/response/errors/error").map {|e| e.text }
       raise MessageError.new(errors.join(", ")) unless errors.empty?

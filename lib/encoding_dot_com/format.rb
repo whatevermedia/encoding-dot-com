@@ -27,11 +27,11 @@ module EncodingDotCom
           @allowed_attributes += attrs.map {|a| a.to_s }.each { |attr| define_method(attr) { @attributes[attr] } }
         end
       end
-      
+
       def boolean_attributes(*attrs) #:nodoc:
         @boolean_attributes ||= []
         if attrs.empty?
-          @boolean_attributes  
+          @boolean_attributes
         else
           allowed_attributes *attrs
           @boolean_attributes += attrs.map {|a| a.to_s }
@@ -44,11 +44,10 @@ module EncodingDotCom
     # +builder+:: a Nokogiri builder, declared with a block
     # +destination_url+:: where the encoded file should be placed. See
     #                     the encoding.com documentation for details.
-    def build_xml(builder, destination_url=nil)
+    def build_xml(builder)
       logo_attributes, other_attributes = self.class.allowed_attributes.partition {|a| a[0..3] == "logo" }
 
       builder.format {
-        builder.destination destination_url
         other_attributes.each do |attr|
           builder.send(attr, output_value(attr)) unless @attributes[attr].nil?
         end
