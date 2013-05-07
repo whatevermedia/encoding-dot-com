@@ -57,17 +57,16 @@ module EncodingDotCom
 
 
     def initialize(attributes={})
+      attributes = EncodingDotCom::VideoFormat.sanitize_attributes attributes
       @attributes = attributes
-      check_valid_output_format
-      mixin_output_attribute_restrictions
       validate_attributes
     end
 
     private
 
     def check_valid_output_format
-      unless ALLOWED_OUTPUT_FORMATS.include?(@attributes["output"])
-        raise IllegalFormatAttribute.new("Output format #{@attributes["output"]} is not allowed.")
+      unless ALLOWED_OUTPUT_FORMATS.include?(output)
+        raise IllegalFormatAttribute.new("Output format #{output} is not allowed.")
       end
     end
 
@@ -78,14 +77,48 @@ module EncodingDotCom
     end
 
     def validate_attributes
+      check_valid_output_format
+      mixin_output_attribute_restrictions
       validate_video_codec
       validate_size
+      validate_watermarking
+      validate_overlay
+      validate_text_overlay
     end
 
     def validate_size
+      return if size.nil?
+      if !size.match(/\d+x\d+/)
+        raise IllegalFormatAttribute.new("Size must be in the format 'width'x'height'")
+      end
+      size_array = size.split 'x'
+      if size_array[0].to_i % 2 != 0 || size_array[1].to_i % 2 !=0
+        raise IllegalFormatAttribute.new("Size must have an even 'width' and 'height'")
+      end
     end
 
     def validate_video_codec
+    end
+
+    def validate_watermarking
+      return if logo.nil?
+      if logo['logo_source'].nil?
+        raise IllegalFormatAttribute.new("Logo must have a nested 'logo_source' value")
+      end
+    end
+
+    def validate_overlay
+      return if overlay.nil?
+      if overlay['overlay_source'].nil?
+        raise IllegalFormatAttribute.new("Overlay must have a nested 'overlay_source' value")
+      end
+    end
+
+    def validate_text_overlay
+      return if text_overlay.nil?
+      if text_overlay['font_source'].nil? || text_overlay['text'].nil?
+        raise IllegalFormatAttribute.new("Text Overlay must have a nested 'font_source' value and 'text' value")
+      end
     end
   end
 end

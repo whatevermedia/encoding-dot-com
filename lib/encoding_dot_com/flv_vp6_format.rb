@@ -5,6 +5,7 @@ module EncodingDotCom
     allowed_attributes :output, :video_codec, :size, :destination, :bitrate, :audio_bitrate, :audio_sample_rate, :audio_channels_number, :framerate
 
     def initialize(attributes={})
+      attributes = EncodingDotCom::VideoFormat.sanitize_attributes attributes
       @attributes = attributes.merge("output" => "flv", "video_codec" => "vp6")
       validate_attributes
     end

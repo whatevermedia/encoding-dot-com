@@ -100,17 +100,20 @@ module EncodingDotCom
 
     private
 
-    def add_request(action, source, formats, opts={})
+    def add_request(action, sources, formats, opts={})
       response = make_request(action) do |q|
-        q.source source
+        sources = [sources] if !sources.kind_of?(Array)
+        sources.each do |source|
+          q.source source
+        end
         formats = [formats] if !formats.kind_of?(Array)
         formats.each {|format| format.build_xml(q) }
         opts.each do |tag, value|
           q.send tag, value
         end
       end
-        media_id = response.xpath("/response/MediaID").text
-        media_id.to_i if media_id
+      media_id = response.xpath("/response/MediaID").text
+      media_id.to_i if media_id
     end
 
     def make_request(action_name, &block)

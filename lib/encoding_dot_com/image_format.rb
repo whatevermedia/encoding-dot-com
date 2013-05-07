@@ -4,6 +4,7 @@ module EncodingDotCom
     boolean_attributes :keep_aspect_ratio
 
     def initialize(attributes={})
+      attributes = EncodingDotCom::VideoFormat.sanitize_attributes attributes
       @attributes = attributes.merge("output" => "image")
       validate_attributes
     end

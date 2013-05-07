@@ -6,6 +6,7 @@ module EncodingDotCom
     # Creates a new ThumbnailFormat. You should be calling
     # Format.create(attributes) rather than this constructor directly.
     def initialize(attributes={})
+      attributes = EncodingDotCom::VideoFormat.sanitize_attributes attributes
       @attributes = attributes.merge("output" => "thumbnail")
       validate_attributes
     end

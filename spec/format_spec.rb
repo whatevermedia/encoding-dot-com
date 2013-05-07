@@ -14,6 +14,14 @@ describe "Encoding.com video format" do
     it "should return a ImageFormat when the output type is image" do
       EncodingDotCom::Format.create("output" => "image").should be_instance_of(EncodingDotCom::ImageFormat)
     end
+
+    it "should return a ThumbnailFormat when the output type is thumbnail" do
+      EncodingDotCom::Format.create("output" => "thumbnail").should be_instance_of(EncodingDotCom::ThumbnailFormat)
+    end
+
+    it "should return a MuxingFormat when the output type is muxer" do
+      EncodingDotCom::Format.create("output" => "muxer").should be_instance_of(EncodingDotCom::MuxerFormat)
+    end
   end
 
   describe "#output" do
@@ -107,14 +115,6 @@ describe "Encoding.com video format" do
       Nokogiri::XML::Builder.new do |b|
         format.build_xml(b)
       end.to_xml.should have_xpath("/format/size[text()='0x480']")
-    end
-
-    it "should create a logo node for logo attributes" do
-      format = EncodingDotCom::VideoFormat.new("output" => "flv", logo: {"logo_x" => 30})
-      Nokogiri::XML::Builder.new do |b|
-        format.build_xml(b)
-      end.to_xml
-      .should have_xpath("/format/logo/logo_x[text()='30']")
     end
 
     it "should have a destination node with the url passed to build xml" do

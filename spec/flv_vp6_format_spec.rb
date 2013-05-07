@@ -36,8 +36,6 @@ describe "Encoding.com FLV VP6 Format" do
   def format_xml(attributes={})
     attributes[:destination] = "http://example.com"
     format = EncodingDotCom::FLVVP6Format.new(attributes)
-    a = Nokogiri::XML::Builder.new {|b| format.build_xml(b)}.to_xml
-    puts a
-    a
+    Nokogiri::XML::Builder.new {|b| format.build_xml(b)}.to_xml
   end
 end

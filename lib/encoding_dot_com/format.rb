@@ -8,6 +8,7 @@ module EncodingDotCom
       # +output+ attribute is required, others are optional (see the
       # encoding.com documentation for full list of attributes).
       def create(attributes)
+        sanitize_attributes(attributes)
         if attributes["output"] == "thumbnail"
           ThumbnailFormat.new(attributes)
         elsif attributes["output"] == "flv" && attributes["video_codec"] == "vp6"
@@ -15,7 +16,7 @@ module EncodingDotCom
         elsif attributes["output"] == "image"
           ImageFormat.new(attributes)
         elsif attributes["output"] == "muxer"
-          MuxingFormat.new(attributes)
+          MuxerFormat.new(attributes)
         else
           VideoFormat.new(attributes)
         end
@@ -46,6 +47,15 @@ module EncodingDotCom
     # +builder+:: a Nokogiri builder, declared with a block
     def build_xml(builder)
       build_node(builder, :format, @attributes)
+    end
+
+    protected
+
+    def self.sanitize_attributes(attributes={})
+      attributes.reduce({}) do |hash,(key,value)|
+        value = self.sanitize_attributes(value) if value.kind_of?(Hash)
+        hash.merge key.to_s => value
+      end
     end
 
     private
