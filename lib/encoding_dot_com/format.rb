@@ -75,8 +75,8 @@ module EncodingDotCom
             if value.kind_of?(Hash)
               build_node builder, key, value
             else
-              # puts "adding" + value
-              builder.send(key, value) unless value.nil?
+              # adding underscore after the key to force it to be a tag instead of matching nokogiri functions
+              builder.send("#{key}_", value) unless value.nil?
             end
           end
         end
