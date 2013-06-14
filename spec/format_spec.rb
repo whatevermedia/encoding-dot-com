@@ -16,7 +16,7 @@ describe "Encoding.com video format" do
     end
 
     it "should return a ThumbnailFormat when the output type is thumbnail" do
-      EncodingDotCom::Format.create("output" => "thumbnail").should be_instance_of(EncodingDotCom::ThumbnailFormat)
+      EncodingDotCom::Format.create(:output => "thumbnail").should be_instance_of(EncodingDotCom::ThumbnailFormat)
     end
 
     it "should return a MuxingFormat when the output type is muxer" do

@@ -8,7 +8,7 @@ module EncodingDotCom
       # +output+ attribute is required, others are optional (see the
       # encoding.com documentation for full list of attributes).
       def create(attributes)
-        sanitize_attributes(attributes)
+        attributes = sanitize_attributes(attributes)
         if attributes["output"] == "thumbnail"
           ThumbnailFormat.new(attributes)
         elsif attributes["output"] == "flv" && attributes["video_codec"] == "vp6"
