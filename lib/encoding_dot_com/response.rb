@@ -49,9 +49,7 @@ module EncodingDotCom
       @document = Nokogiri::XML @xml
       @document = @xml if @xml.is_a? Nokogiri::XML::Document
       @status = value_at_node 'response/status'
-      @status = value_at_node 'result/status' if status.empty?
       @result = value_at_node 'response/result'
-      @result = value_at_node 'result' if result.empty?
     end
   end
 end

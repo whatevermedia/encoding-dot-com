@@ -45,40 +45,34 @@ describe "Encoding.com response parser" do
       context 'error' do
         let(:xml) { xml_with_status('Error') }
         let(:response) { EncodingDotCom::Response.new(xml) }
+        subject { response }
 
-        it 'response.status should == Error' do
-          response.status.should == 'Error'
-        end
-
-        it { response.should be_error }
-        it { response.should_not be_successful }
-        it { response.should_not be_finished }
+        its(:status) { should == 'Error' }
+        it { should be_error }
+        it { should_not be_successful }
+        it { should_not be_finished }
       end
 
       context 'success' do
         let(:xml) { xml_with_status('Success') }
         let(:response) { EncodingDotCom::Response.new(xml) }
+        subject { response }
 
-        it 'response.status should == Success' do
-          response.status.should == 'Success'
-        end
-
-        it { response.should be_successful }
-        it { response.should_not be_error }
-        it { response.should_not be_finished }
+        its(:status) { should == 'Success' }
+        it { should be_successful }
+        it { should_not be_error }
+        it { should_not be_finished }
       end
 
       context 'finished' do
         let(:xml) { xml_with_status('Finished') }
         let(:response) { EncodingDotCom::Response.new(xml) }
+        subject { response }
 
-        it 'response.status should == Finished' do
-          response.status.should == 'Finished'
-        end
-
-        it { response.should be_finished }
-        it { response.should_not be_successful }
-        it { response.should_not be_error }
+        its(:status) { should == 'Finished' }
+        it { should be_finished }
+        it { should_not be_successful }
+        it { should_not be_error }
       end
 
     end
