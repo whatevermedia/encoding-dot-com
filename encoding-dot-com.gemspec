@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{encoding-dot-com}
-  s.version = "0.0.6"
+  s.version = "0.0.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{Roland Swingler}, %q{Alan Kennedy}, %q{Levent Ali}]
@@ -39,6 +39,8 @@ Gem::Specification.new do |s|
      "lib/encoding_dot_com/media_list_item.rb",
      "lib/encoding_dot_com/media_status_report.rb",
      "lib/encoding_dot_com/queue.rb",
+     "lib/encoding_dot_com/response.rb",
+     "lib/encoding_dot_com/notify_response.rb",
      "lib/encoding_dot_com/thumbnail_format.rb",
      "lib/encoding_dot_com/video_format.rb",
      "spec/encoding_dot_com/http_adapters/curb_adapter_spec.rb",

@@ -1,4 +1,6 @@
 require 'encoding_dot_com/errors'
+require 'encoding_dot_com/response'
+require 'encoding_dot_com/notify_response'
 require 'encoding_dot_com/queue'
 require 'encoding_dot_com/attribute_restrictions'
 require 'encoding_dot_com/format'
