@@ -141,10 +141,14 @@ describe "Encoding.com notify response parser" do
 
     end
 
-    describe '#get_destinations' do
+    describe '#get_each_format' do
       context 'no block given' do
         it 'should return formats with no block given' do
-          response.get_destinations.should == response.formats
+          response.get_each_format.should == response.formats
+        end
+
+        it 'should return same format block calling get_each_format#first' do
+          response.get_each_format.first.should == response.formats.first
         end
       end
 
@@ -153,27 +157,32 @@ describe "Encoding.com notify response parser" do
 
         it 'should return 3 objects with 3 format blocks' do
           times = []
-          response.get_destinations { |destination, status, output| times << output }
+          response.get_each_format { |format, status| times << format }
           times.count.should == 3
         end
 
-        it 'should return array of correct outputs' do
+        it 'should yield each status' do
           outputs = []
-          response.get_destinations { |destination, status, output| outputs << output }
-          outputs.should == ['mp4', 'mp4', 'mp4']
+          response.get_each_format { |format, status| outputs << status }
+          outputs.should == ['New', 'New', 'New']
         end
 
-        it 'should return array of correct destinations' do
-          destinations = []
-          response.get_destinations { |destination, status, output| destinations << destination }
-          destinations.should == ['www.example.com', 'www.example.com', 'www.example.com']
+        it 'should yield each format' do
+          expected_formats = response.formats.inject([]) { |arr, format| arr << format }
+          formats = []
+          response.get_each_format { |format, status| formats << format }
+          formats.should == expected_formats
         end
+      end
+    end
 
-        it 'should return array of correct statuses' do
-          statuses = []
-          response.get_destinations { |destination, status, output| statuses << status }
-          statuses.should == ['New', 'New', 'New']
-        end
+    describe '#value_at_format_node' do
+      let(:format) { response.formats.first }
+      let(:node) { 'output' }
+
+      it 'should yield correct value at format node' do
+        expected = response.document.xpath('//format').first.xpath(node)
+        response.value_at_format_node(format, node)
       end
     end
 

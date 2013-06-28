@@ -16,10 +16,15 @@ module EncodingDotCom
     #
     # +block+:: yields destination, status, and output for each format to allow custom implementation of nodes
     # If not block given, returns formats node
-    def get_destinations(&block)
+
+    def value_at_format_node(format, node)
+      format.xpath(node).text
+    end
+
+    def get_each_format
       return formats unless block_given?
       formats.each do |format|
-        yield format.xpath('destination').text, format.xpath('status').text, format.xpath('output').text
+        yield format, format.xpath('status').text
       end
     end
   end
