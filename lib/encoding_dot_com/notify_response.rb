@@ -12,10 +12,6 @@ module EncodingDotCom
       @source = value_at_node 'result/source'
     end
 
-    def value_at_format_node(format, node)
-      format.xpath(node).text
-    end
-
     # Get destinations returned from encoding
     #
     # +block+:: yields format block and status for each format to allow custom implementation of nodes
