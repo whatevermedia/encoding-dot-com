@@ -176,16 +176,6 @@ describe "Encoding.com notify response parser" do
       end
     end
 
-    describe '#value_at_format_node' do
-      let(:format) { response.formats.first }
-      let(:node) { 'output' }
-
-      it 'should yield correct value at format node' do
-        expected = response.document.xpath('//format').first.xpath(node)
-        response.value_at_format_node(format, node)
-      end
-    end
-
   end
 
 end
