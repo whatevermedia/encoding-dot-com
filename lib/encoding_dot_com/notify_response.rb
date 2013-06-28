@@ -12,15 +12,14 @@ module EncodingDotCom
       @source = value_at_node 'result/source'
     end
 
-    # Get destinations returned from encoding
-    #
-    # +block+:: yields destination, status, and output for each format to allow custom implementation of nodes
-    # If not block given, returns formats node
-
     def value_at_format_node(format, node)
       format.xpath(node).text
     end
 
+    # Get destinations returned from encoding
+    #
+    # +block+:: yields format block and status for each format to allow custom implementation of nodes
+    # If not block given, returns formats node
     def get_each_format
       return formats unless block_given?
       formats.each do |format|
