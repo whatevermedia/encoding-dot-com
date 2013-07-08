@@ -98,6 +98,24 @@ module EncodingDotCom
       MediaInfo.new(response)
     end
 
+    # Completely restarts the entire job specified by media_id
+    def restart_media(media_id)
+      make_request("RestartMedia") {|q| q.mediaid media_id }
+    end
+
+    # Only retry tasks that have ended with an error
+    def restart_errored_tasks(media_id)
+      make_request("RestartMediaErrors") { |q| q.mediaid media_id }
+    end
+
+    # Only restart a specific task specified by the taskid
+    def restart_task(media_id, task_id)
+      make_request("RestartMediaTask") do |q|
+        q.mediaid media_id
+        q.taskid task_id
+      end
+    end
+
     private
 
     def add_request(action, sources, formats, opts={})

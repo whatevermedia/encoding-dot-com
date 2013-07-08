@@ -80,6 +80,47 @@ describe "Encoding.com Queue facade" do
     end
   end
 
+  describe "calling restart_media" do
+    it "should have an action of 'RestartMedia'" do
+      expect_xml_with_xpath("/query/action[text()='RestartMedia']")
+      @facade.restart_media(stub("media_id"))
+    end
+
+    it 'should include a media id node' do
+      expect_xml_with_xpath("/query/mediaid[text()='abcd']")
+      @facade.restart_media("abcd")
+    end
+  end
+
+  describe "calling restart_errored_tasks" do
+    it "should have an action of 'RestartMediaErrors'" do
+      expect_xml_with_xpath("/query/action[text()='RestartMediaErrors']")
+      @facade.restart_errored_tasks(stub("media_id"))
+    end
+
+    it "should include a media id node" do
+      expect_xml_with_xpath("/query/mediaid[text()='abcd']")
+      @facade.restart_errored_tasks('abcd')
+    end
+  end
+
+  describe "calling restart_task" do
+    it "should have an action of 'RestartMediaTask'" do
+      expect_xml_with_xpath("/query/action[text()='RestartMediaTask']")
+      @facade.restart_task(stub("media_id"), stub("task_id"))
+    end
+
+    it "should include a media id node" do
+      expect_xml_with_xpath("/query/mediaid[text()='abcd']")
+      @facade.restart_task('abcd', stub("task_id"))
+    end
+
+    it "should include a task id node" do
+      expect_xml_with_xpath("/query/taskid[text()='1234']")
+      @facade.restart_task(stub("media_id"), '1234')
+    end
+  end
+
   describe "calling add_and_process" do
     it "should return the a media id" do
       expect_response_xml("<response><MediaID>1234</MediaID></response>")
