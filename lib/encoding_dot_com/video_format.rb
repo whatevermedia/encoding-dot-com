@@ -1,6 +1,9 @@
 module EncodingDotCom
   class VideoFormat < Format #:nodoc:
-    ALLOWED_OUTPUT_FORMATS = %w{flv fl9 wmv 3gp mp4 m4v ipad ipod iphone appletv psp zune mp3 wma}.freeze
+    ALLOWED_OUTPUT_FORMATS = %w{flv fl9 wmv mov 3gp mp4 m4v ipod iphone ipad android ogg 
+      webm appletv psp zune mp3 wma m4a mpeg1 mpeg2 iphone_stream ipad_stream muxer 
+      wowza wowza_multibitrate roku_800 roku_1200 roku_1800 roku_2700 roku_hls mpegts 
+      dnxhd vidly vidly_lite kindle_fire eac3 smooth_streaming hds}.freeze
 
     ##Api Output Format Fields
     #Video Outputs
