@@ -48,6 +48,9 @@ module EncodingDotCom
   module AttributeRestrictionsWmv #:nodoc:
   end
 
+  module AttributeRestrictionsMov #:nodoc:
+  end
+
   module AttributeRestrictions3gp #:nodoc:
   end
   
@@ -58,6 +61,15 @@ module EncodingDotCom
   end
   
   module AttributeRestrictionsIpad #:nodoc:
+  end
+
+  module AttributeRestrictionsAndroid #:nodoc:
+  end
+
+  module AttributeRestrictionsOgg #:nodoc:
+  end
+
+  module AttributeRestrictionsWebm #:nodoc:
   end
   
   module AttributeRestrictionsAppletv #:nodoc:
@@ -70,6 +82,69 @@ module EncodingDotCom
   end
   
   module AttributeRestrictionsWma #:nodoc:
+  end
+
+  module AttributeRestrictionsM4a #:nodoc:
+  end
+
+  module AttributeRestrictionsMpeg1 #:nodoc:
+  end
+
+  module AttributeRestrictionsMpeg2 #:nodoc:
+  end
+
+  module AttributeRestrictionsIphoneStream #:nodoc:
+  end
+
+  module AttributeRestrictionsIpadStream #:nodoc:
+  end
+
+  module AttributeRestrictionsmuxer #:nodoc:
+  end
+
+  module AttributeRestrictionsWowza #:nodoc:
+  end
+
+  module AttributeRestrictionsMultibitrate #:nodoc:
+  end
+
+  module AttributeRestrictionsRoku800 #:nodoc:
+  end
+
+  module AttributeRestrictionsRoku1200 #:nodoc:
+  end
+
+  module AttributeRestrictionsRoku1800 #:nodoc:
+  end
+
+  module AttributeRestrictionsRoku2700 #:nodoc:
+  end
+
+  module AttributeRestrictionsRokuHls #:nodoc:
+  end
+
+  module AttributeRestrictionsMpegts #:nodoc:
+  end
+
+  module AttributeRestrictionsDnxhd #:nodoc:
+  end
+
+  module AttributeRestrictionsVidly #:nodoc:
+  end
+
+  module AttributeRestrictionsVidlyLite #:nodoc:
+  end
+
+  module AttributeRestrictionsKindleFire #:nodoc:
+  end
+
+  module AttributeRestrictionsEac3 #:nodoc:
+  end
+
+  module AttributeRestrictionsSmoothStreaming #:nodoc:
+  end
+
+  module AttributeRestrictionsHds #:nodoc:
   end
   
   module AttributeRestrictionsThumbnail #:nodoc:
